@@ -6,20 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('saved_movie_id')->constrained()->cascadeOnDelete();
+            $table->unsignedTinyInteger('rating')->nullable();
+            $table->text('review_text')->nullable();
             $table->timestamps();
+
+            // One review per saved movie entry.
+            $table->unique('saved_movie_id');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('reviews');
